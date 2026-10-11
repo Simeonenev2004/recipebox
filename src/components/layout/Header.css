@@ -42,3 +42,20 @@
   color: var(--color-primary-dark);
   font-weight: bold;
 }
+
+.nav {
+  align-items: center;
+}
+
+.greeting {
+  padding: 0 0.5rem;
+}
+
+.logout-btn {
+  padding: 0.35rem 0.75rem;
+  background-color: var(--color-secondary);
+}
+
+.logout-btn:hover {
+  background-color: #2f241d;
+}
