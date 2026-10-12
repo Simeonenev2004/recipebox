@@ -1,3 +1,44 @@
 .details {
+  max-width: 720px;
+  margin: 0 auto;
   padding: 1rem 0;
+}
+
+.details-image {
+  height: 320px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.details-meta {
+  margin: 0.25rem 0;
+  color: var(--color-secondary);
+}
+
+.details-instructions {
+  white-space: pre-line;
+}
+
+.details-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.btn-danger {
+  background-color: #c62828;
+}
+
+.btn-danger:hover {
+  background-color: #9b1f1f;
+}
+
+.details-error {
+  color: #b3261e;
+}
+
+@media (max-width: 500px) {
+  .details-image {
+    height: 220px;
+  }
 }
