@@ -5,10 +5,12 @@ import {
   updateProfile,
 } from 'firebase/auth'
 import { auth } from './firebase.js'
+import { createUserProfile } from './userService.js'
 
 export async function register(email, password, username) {
   const result = await createUserWithEmailAndPassword(auth, email, password)
   await updateProfile(result.user, { displayName: username })
+  await createUserProfile(result.user.uid, username)
   return result.user
 }
 

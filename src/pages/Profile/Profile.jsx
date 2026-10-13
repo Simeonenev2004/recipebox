@@ -1,14 +1,102 @@
-import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import { useAuth } from '../../contexts/AuthContext.jsx'
+import { getUserProfile } from '../../services/userService.js'
+import { getRecipesByOwner } from '../../services/recipeService.js'
+import RecipeCard from '../../components/RecipeCard/RecipeCard.jsx'
+import '../Catalog/Catalog.css'
 import './Profile.css'
 
 function Profile() {
   const { userId } = useParams()
+  const { user } = useAuth()
+
+  const [profile, setProfile] = useState(null)
+  const [recipes, setRecipes] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  // Update example: the effect runs again whenever userId changes
+  useEffect(() => {
+    // ignore stops an old request from updating state after unmount or when the user changes
+    let ignore = false
+
+    setIsLoading(true)
+    setError('')
+    Promise.all([getUserProfile(userId), getRecipesByOwner(userId)])
+      .then(([profileResult, recipesResult]) => {
+        if (!ignore) {
+          setProfile(profileResult)
+          setRecipes(recipesResult)
+          setIsLoading(false)
+        }
+      })
+      .catch(() => {
+        if (!ignore) {
+          setError('Could not load the profile. Please try again later.')
+          setIsLoading(false)
+        }
+      })
+
+    return () => {
+      ignore = true
+    }
+  }, [userId])
+
+  if (isLoading) {
+    return <p>Loading profile...</p>
+  }
+
+  if (error) {
+    return <p className="profile-error">{error}</p>
+  }
+
+  let username = null
+  if (profile) {
+    username = profile.username
+  } else if (recipes.length > 0) {
+    username = recipes[0].ownerName
+  }
+
+  if (!username) {
+    return (
+      <section>
+        <h1>User not found</h1>
+        <Link to="/catalog">Back to catalog</Link>
+      </section>
+    )
+  }
+
+  const isMyProfile = user !== null && user.uid === userId
 
   return (
     <section className="profile">
-      <h1>Profile</h1>
-      <p>Here the user info and their recipes will be shown.</p>
-      <p>User id: {userId}</p>
+      <div className="profile-header">
+        <div className="profile-avatar">{username[0].toUpperCase()}</div>
+        <div>
+          <h1>{isMyProfile ? 'My Profile' : username}</h1>
+          {isMyProfile && <p className="profile-meta">{username}</p>}
+          {profile && profile.createdAt && (
+            <p className="profile-meta">
+              Member since {profile.createdAt.toDate().toLocaleDateString()}
+            </p>
+          )}
+          <p className="profile-meta">
+            {recipes.length === 1 ? '1 recipe' : `${recipes.length} recipes`}
+          </p>
+        </div>
+        {isMyProfile && <Link to="/create" className="btn">Add recipe</Link>}
+      </div>
+
+      {recipes.length === 0 ? (
+        <p>No recipes yet.</p>
+      ) : (
+        <div className="catalog-grid">
+          {recipes.map((recipe) => (
+            <RecipeCard key={recipe.id} recipe={recipe} />
+          ))}
+        </div>
+      )}
     </section>
   )
 }

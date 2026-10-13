@@ -1,3 +1,41 @@
 .profile {
   padding: 1rem 0;
 }
+
+.profile-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.profile-header .btn {
+  margin-left: auto;
+}
+
+.profile-header h1 {
+  margin: 0 0 0.25rem;
+}
+
+.profile-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: #fff;
+  font-size: 2.25rem;
+  font-weight: bold;
+}
+
+.profile-meta {
+  margin: 0;
+  color: var(--color-secondary);
+}
+
+.profile-error {
+  color: #b3261e;
+}
