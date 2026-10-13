@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext.jsx'
+import { useDocumentTitle } from '../../hooks/useDocumentTitle.js'
 import { createRecipe } from '../../services/recipeService.js'
 import RecipeForm from '../../components/RecipeForm/RecipeForm.jsx'
 
@@ -14,6 +15,8 @@ const emptyValues = {
 }
 
 function Create() {
+  useDocumentTitle('Create recipe')
+
   const { user } = useAuth()
   const navigate = useNavigate()
 

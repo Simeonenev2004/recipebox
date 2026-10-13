@@ -2,11 +2,14 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext.jsx'
 import { getAuthErrorMessage } from '../../services/authService.js'
+import { useDocumentTitle } from '../../hooks/useDocumentTitle.js'
 import './Auth.css'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 function Login() {
+  useDocumentTitle('Login')
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errors, setErrors] = useState({})
@@ -61,6 +64,7 @@ function Login() {
         <label htmlFor="email">Email</label>
         <input
           id="email"
+          aria-invalid={errors.email ? 'true' : undefined}
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -70,6 +74,7 @@ function Login() {
         <label htmlFor="password">Password</label>
         <input
           id="password"
+          aria-invalid={errors.password ? 'true' : undefined}
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -78,7 +83,7 @@ function Login() {
 
         {formError && <p className="form-error">{formError}</p>}
 
-        <button className="btn" type="submit" disabled={isLoading}>
+        <button className="btn btn-primary btn-block" type="submit" disabled={isLoading}>
           {isLoading ? 'Please wait...' : 'Login'}
         </button>
       </form>

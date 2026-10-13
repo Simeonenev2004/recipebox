@@ -23,7 +23,9 @@ function Header() {
               <NavLink to="/create">Create</NavLink>
               <NavLink to={`/profile/${user.uid}`}>My Profile</NavLink>
               <span className="greeting">Hello, {user.username}</span>
-              <button className="btn logout-btn" onClick={handleLogout}>Logout</button>
+              <button className="btn btn-secondary btn-small" onClick={handleLogout}>
+                Logout
+              </button>
             </>
           ) : (
             <>

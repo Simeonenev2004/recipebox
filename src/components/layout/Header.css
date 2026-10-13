@@ -1,6 +1,6 @@
 .header {
   background-color: var(--color-primary);
-  color: #fff;
+  color: var(--color-on-primary);
 }
 
 .header-inner {
@@ -8,54 +8,50 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+  gap: var(--space-sm) var(--space-md);
 }
 
 .logo {
-  color: #fff;
+  color: var(--color-on-primary);
   font-size: 1.5rem;
   font-weight: bold;
   text-decoration: none;
 }
 
+.logo:hover {
+  color: var(--color-on-primary);
+}
+
 .nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
 .nav a {
-  color: #fff;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  color: var(--color-on-primary);
   text-decoration: none;
-  padding: 0.35rem 0.75rem;
-  border-radius: 4px;
 }
 
 .nav a:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: var(--overlay-light);
+  color: var(--color-on-primary);
 }
 
 .nav a.active {
-  background-color: #fff;
+  background-color: var(--color-surface);
   color: var(--color-primary-dark);
   font-weight: bold;
 }
 
-.nav {
-  align-items: center;
-}
-
 .greeting {
-  padding: 0 0.5rem;
+  padding: 0 var(--space-sm);
 }
 
-.logout-btn {
-  padding: 0.35rem 0.75rem;
-  background-color: var(--color-secondary);
-}
-
-.logout-btn:hover {
-  background-color: #2f241d;
+.header a:focus-visible,
+.header button:focus-visible {
+  outline-color: var(--color-on-primary);
 }

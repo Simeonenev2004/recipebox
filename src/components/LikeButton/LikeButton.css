@@ -2,17 +2,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.75rem;
-  margin: 1.5rem 0;
-}
-
-.like-btn {
-  padding: 0.4rem 0.9rem;
-}
-
-.like-btn:disabled {
-  background-color: var(--color-gray);
-  cursor: not-allowed;
+  gap: var(--space-md);
+  margin: var(--space-lg) 0;
 }
 
 .like-count {
@@ -20,5 +11,5 @@
 }
 
 .like-error {
-  color: #b3261e;
+  color: var(--color-error);
 }

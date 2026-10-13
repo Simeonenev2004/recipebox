@@ -1,0 +1,10 @@
+.not-found {
+  padding: var(--space-xl) 0;
+  text-align: center;
+}
+
+.not-found-code {
+  margin: 0;
+  font-size: 6rem;
+  color: var(--color-primary);
+}

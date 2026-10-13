@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext.jsx'
+import { useDocumentTitle } from '../../hooks/useDocumentTitle.js'
 import { getRecipeById, updateRecipe } from '../../services/recipeService.js'
 import RecipeForm from '../../components/RecipeForm/RecipeForm.jsx'
+import Loader from '../../components/Loader/Loader.jsx'
+import ErrorMessage from '../../components/ErrorMessage/ErrorMessage.jsx'
 
 function Edit() {
+  useDocumentTitle('Edit recipe')
+
   const { id } = useParams()
   const { user } = useAuth()
   const navigate = useNavigate()
@@ -44,11 +49,11 @@ function Edit() {
   }
 
   if (isLoading) {
-    return <p>Loading recipe...</p>
+    return <Loader text="Loading recipe..." />
   }
 
   if (error) {
-    return <p className="form-error">{error}</p>
+    return <ErrorMessage message={error} />
   }
 
   if (!recipe) {

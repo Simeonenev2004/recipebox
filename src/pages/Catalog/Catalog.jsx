@@ -5,6 +5,8 @@ import { useDocumentTitle } from '../../hooks/useDocumentTitle.js'
 import { getAllRecipes } from '../../services/recipeService.js'
 import { CATEGORIES } from '../../constants/categories.js'
 import RecipeCard from '../../components/RecipeCard/RecipeCard.jsx'
+import Loader from '../../components/Loader/Loader.jsx'
+import ErrorMessage from '../../components/ErrorMessage/ErrorMessage.jsx'
 import './Catalog.css'
 
 const SORT_OPTIONS = [
@@ -74,16 +76,11 @@ function Catalog() {
   }
 
   if (isLoading) {
-    return <p>Loading recipes...</p>
+    return <Loader text="Loading recipes..." />
   }
 
   if (error) {
-    return (
-      <section className="catalog">
-        <p className="catalog-error">{error}</p>
-        <button className="btn" onClick={loadRecipes}>Try again</button>
-      </section>
-    )
+    return <ErrorMessage message={error} onRetry={loadRecipes} />
   }
 
   const searchText = search.trim().toLowerCase()
@@ -141,10 +138,10 @@ function Catalog() {
           {visibleRecipes.length === 0 ? (
             <div>
               <p>No recipes match your filters.</p>
-              <button className="btn" onClick={clearFilters}>Clear filters</button>
+              <button className="btn btn-primary" onClick={clearFilters}>Clear filters</button>
             </div>
           ) : (
-            <div className="catalog-grid">
+            <div className="recipe-grid">
               {visibleRecipes.map((recipe) => (
                 <RecipeCard key={recipe.id} recipe={recipe} />
               ))}

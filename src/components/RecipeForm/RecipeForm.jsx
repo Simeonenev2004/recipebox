@@ -92,11 +92,11 @@ function RecipeForm({ initialValues, onSubmit, submitLabel }) {
   return (
     <form className="recipe-form" onSubmit={handleSubmit} noValidate>
       <label htmlFor="title">Title</label>
-      <input id="title" name="title" type="text" value={values.title} onChange={handleChange} />
+      <input id="title" aria-invalid={errors.title ? 'true' : undefined} name="title" type="text" value={values.title} onChange={handleChange} />
       {errors.title && <span className="field-error">{errors.title}</span>}
 
       <label htmlFor="category">Category</label>
-      <select id="category" name="category" value={values.category} onChange={handleChange}>
+      <select id="category" aria-invalid={errors.category ? 'true' : undefined} name="category" value={values.category} onChange={handleChange}>
         <option value="">Select a category</option>
         {CATEGORIES.map((category) => (
           <option key={category} value={category}>{category}</option>
@@ -105,33 +105,33 @@ function RecipeForm({ initialValues, onSubmit, submitLabel }) {
       {errors.category && <span className="field-error">{errors.category}</span>}
 
       <label htmlFor="imageUrl">Image URL (optional)</label>
-      <input id="imageUrl" name="imageUrl" type="text" value={values.imageUrl} onChange={handleChange} />
+      <input id="imageUrl" aria-invalid={errors.imageUrl ? 'true' : undefined} name="imageUrl" type="text" value={values.imageUrl} onChange={handleChange} />
       {errors.imageUrl && <span className="field-error">{errors.imageUrl}</span>}
 
       <div className="recipe-form-row">
         <div>
           <label htmlFor="prepTime">Preparation time (minutes)</label>
-          <input id="prepTime" name="prepTime" type="number" value={values.prepTime} onChange={handleChange} />
+          <input id="prepTime" aria-invalid={errors.prepTime ? 'true' : undefined} name="prepTime" type="number" value={values.prepTime} onChange={handleChange} />
           {errors.prepTime && <span className="field-error">{errors.prepTime}</span>}
         </div>
         <div>
           <label htmlFor="servings">Servings</label>
-          <input id="servings" name="servings" type="number" value={values.servings} onChange={handleChange} />
+          <input id="servings" aria-invalid={errors.servings ? 'true' : undefined} name="servings" type="number" value={values.servings} onChange={handleChange} />
           {errors.servings && <span className="field-error">{errors.servings}</span>}
         </div>
       </div>
 
       <label htmlFor="ingredients">Ingredients (one per line)</label>
-      <textarea id="ingredients" name="ingredients" value={values.ingredients} onChange={handleChange} />
+      <textarea id="ingredients" aria-invalid={errors.ingredients ? 'true' : undefined} name="ingredients" value={values.ingredients} onChange={handleChange} />
       {errors.ingredients && <span className="field-error">{errors.ingredients}</span>}
 
       <label htmlFor="instructions">Instructions</label>
-      <textarea id="instructions" name="instructions" value={values.instructions} onChange={handleChange} />
+      <textarea id="instructions" aria-invalid={errors.instructions ? 'true' : undefined} name="instructions" value={values.instructions} onChange={handleChange} />
       {errors.instructions && <span className="field-error">{errors.instructions}</span>}
 
       {formError && <p className="form-error">{formError}</p>}
 
-      <button className="btn" type="submit" disabled={isSaving}>
+      <button className="btn btn-primary btn-block" type="submit" disabled={isSaving}>
         {isSaving ? 'Saving...' : submitLabel}
       </button>
     </form>

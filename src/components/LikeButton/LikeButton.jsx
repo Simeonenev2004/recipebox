@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext.jsx'
 import { addLike, getLikes, removeLike } from '../../services/likeService.js'
+import Loader from '../Loader/Loader.jsx'
 import './LikeButton.css'
 
 function LikeButton({ recipeId, ownerId }) {
@@ -56,13 +57,13 @@ function LikeButton({ recipeId, ownerId }) {
   }
 
   if (isLoading) {
-    return <p className="like-box">Loading likes...</p>
+    return <Loader text="Loading likes..." />
   }
 
   return (
     <div className="like-box">
       {isAuthenticated && !isOwner ? (
-        <button className="btn like-btn" onClick={handleClick} disabled={isBusy}>
+        <button className="btn btn-primary btn-small" onClick={handleClick} disabled={isBusy}>
           {hasLiked ? '❤️ Unlike' : '🤍 Like'}
         </button>
       ) : (

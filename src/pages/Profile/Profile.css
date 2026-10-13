@@ -1,13 +1,13 @@
 .profile {
-  padding: 1rem 0;
+  padding: var(--space-md) 0;
 }
 
 .profile-header {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 1.25rem;
-  margin-bottom: 2rem;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
 }
 
 .profile-header .btn {
@@ -15,7 +15,7 @@
 }
 
 .profile-header h1 {
-  margin: 0 0 0.25rem;
+  margin: 0 0 var(--space-xs);
 }
 
 .profile-avatar {
@@ -26,7 +26,7 @@
   height: 80px;
   border-radius: 50%;
   background-color: var(--color-primary);
-  color: #fff;
+  color: var(--color-on-primary);
   font-size: 2.25rem;
   font-weight: bold;
 }
@@ -34,8 +34,4 @@
 .profile-meta {
   margin: 0;
   color: var(--color-secondary);
-}
-
-.profile-error {
-  color: #b3261e;
 }

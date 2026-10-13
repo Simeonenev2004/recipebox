@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext.jsx'
+import { useDocumentTitle } from '../../hooks/useDocumentTitle.js'
 import { deleteRecipe, getRecipeById } from '../../services/recipeService.js'
 import RecipeImage from '../../components/RecipeImage/RecipeImage.jsx'
 import LikeButton from '../../components/LikeButton/LikeButton.jsx'
 import Comments from '../../components/Comments/Comments.jsx'
+import Loader from '../../components/Loader/Loader.jsx'
+import ErrorMessage from '../../components/ErrorMessage/ErrorMessage.jsx'
 import './Details.css'
 
 function Details() {
@@ -16,6 +19,8 @@ function Details() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
   const [deleteError, setDeleteError] = useState('')
+
+  useDocumentTitle(recipe ? recipe.title : 'Recipe')
 
   useEffect(() => {
     // ignore stops an old request from updating state after unmount or when the id changes
@@ -57,11 +62,11 @@ function Details() {
   }
 
   if (isLoading) {
-    return <p>Loading recipe...</p>
+    return <Loader text="Loading recipe..." />
   }
 
   if (error) {
-    return <p className="details-error">{error}</p>
+    return <ErrorMessage message={error} />
   }
 
   if (!recipe) {
@@ -103,11 +108,11 @@ function Details() {
 
       {isOwner && (
         <div className="details-actions">
-          <Link to={`/catalog/${id}/edit`} className="btn">Edit</Link>
+          <Link to={`/catalog/${id}/edit`} className="btn btn-primary">Edit</Link>
           <button className="btn btn-danger" onClick={handleDelete}>Delete</button>
         </div>
       )}
-      {deleteError && <p className="details-error">{deleteError}</p>}
+      {deleteError && <ErrorMessage message={deleteError} />}
 
       <Comments recipeId={id} recipeOwnerId={recipe.ownerId} />
     </section>

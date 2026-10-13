@@ -2,11 +2,14 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext.jsx'
 import { getAuthErrorMessage } from '../../services/authService.js'
+import { useDocumentTitle } from '../../hooks/useDocumentTitle.js'
 import '../Login/Auth.css'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 function Register() {
+  useDocumentTitle('Register')
+
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -73,6 +76,7 @@ function Register() {
         <label htmlFor="username">Username</label>
         <input
           id="username"
+          aria-invalid={errors.username ? 'true' : undefined}
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
@@ -82,6 +86,7 @@ function Register() {
         <label htmlFor="email">Email</label>
         <input
           id="email"
+          aria-invalid={errors.email ? 'true' : undefined}
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -91,6 +96,7 @@ function Register() {
         <label htmlFor="password">Password</label>
         <input
           id="password"
+          aria-invalid={errors.password ? 'true' : undefined}
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -100,6 +106,7 @@ function Register() {
         <label htmlFor="repeatPassword">Repeat password</label>
         <input
           id="repeatPassword"
+          aria-invalid={errors.repeatPassword ? 'true' : undefined}
           type="password"
           value={repeatPassword}
           onChange={(e) => setRepeatPassword(e.target.value)}
@@ -108,7 +115,7 @@ function Register() {
 
         {formError && <p className="form-error">{formError}</p>}
 
-        <button className="btn" type="submit" disabled={isLoading}>
+        <button className="btn btn-primary btn-block" type="submit" disabled={isLoading}>
           {isLoading ? 'Please wait...' : 'Register'}
         </button>
       </form>

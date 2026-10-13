@@ -5,6 +5,8 @@ import { useDocumentTitle } from '../../hooks/useDocumentTitle.js'
 import { getLatestRecipes } from '../../services/recipeService.js'
 import { CATEGORIES, CATEGORY_ICONS } from '../../constants/categories.js'
 import RecipeCard from '../../components/RecipeCard/RecipeCard.jsx'
+import Loader from '../../components/Loader/Loader.jsx'
+import ErrorMessage from '../../components/ErrorMessage/ErrorMessage.jsx'
 import './Home.css'
 
 function Home() {
@@ -32,16 +34,11 @@ function Home() {
 
   function renderLatest() {
     if (isLoading) {
-      return <p>Loading recipes...</p>
+      return <Loader text="Loading recipes..." />
     }
 
     if (error) {
-      return (
-        <div>
-          <p className="home-error">{error}</p>
-          <button className="btn" onClick={loadRecipes}>Try again</button>
-        </div>
-      )
+      return <ErrorMessage message={error} onRetry={loadRecipes} />
     }
 
     if (recipes.length === 0) {
@@ -49,7 +46,7 @@ function Home() {
     }
 
     return (
-      <div className="catalog-grid">
+      <div className="recipe-grid">
         {recipes.map((recipe) => (
           <RecipeCard key={recipe.id} recipe={recipe} />
         ))}
@@ -66,11 +63,11 @@ function Home() {
           from other cooks, or add your own favourites.
         </p>
         <div className="hero-buttons">
-          <Link to="/catalog" className="btn">Browse recipes</Link>
+          <Link to="/catalog" className="btn btn-primary">Browse recipes</Link>
           {isAuthenticated ? (
-            <Link to="/create" className="btn hero-secondary">Share a recipe</Link>
+            <Link to="/create" className="btn btn-secondary">Share a recipe</Link>
           ) : (
-            <Link to="/register" className="btn hero-secondary">Join RecipeBox</Link>
+            <Link to="/register" className="btn btn-secondary">Join RecipeBox</Link>
           )}
         </div>
       </section>

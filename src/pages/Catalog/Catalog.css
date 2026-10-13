@@ -1,39 +1,22 @@
 .catalog {
-  padding: 1rem 0;
+  padding: var(--space-md) 0;
 }
 
 .catalog-filters {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
 }
 
 .catalog-filters input,
 .catalog-filters select {
-  width: 100%;
   margin-bottom: 0;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--color-gray);
-  border-radius: 4px;
-  background-color: #fff;
-  font-family: inherit;
-  font-size: 1rem;
 }
 
 .catalog-count {
-  margin: 0 0 1rem;
+  margin: 0 0 var(--space-md);
   color: var(--color-secondary);
-}
-
-.catalog-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.25rem;
-}
-
-.catalog-error {
-  color: #b3261e;
 }
 
 @media (min-width: 700px) {

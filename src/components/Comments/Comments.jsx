@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext.jsx'
 import { addComment, deleteComment, getComments } from '../../services/commentService.js'
+import Loader from '../Loader/Loader.jsx'
+import ErrorMessage from '../ErrorMessage/ErrorMessage.jsx'
 import './Comments.css'
 
 const MAX_LENGTH = 500
@@ -86,8 +88,8 @@ function Comments({ recipeId, recipeOwnerId }) {
     <section className="comments">
       <h2>Comments ({comments.length})</h2>
 
-      {isLoading && <p>Loading comments...</p>}
-      {loadError && <p className="comments-error">{loadError}</p>}
+      {isLoading && <Loader text="Loading comments..." />}
+      {loadError && <ErrorMessage message={loadError} />}
       {!isLoading && !loadError && comments.length === 0 && <p>No comments yet.</p>}
 
       <ul className="comment-list">
@@ -99,7 +101,7 @@ function Comments({ recipeId, recipeOwnerId }) {
                 {comment.createdAt.toDate().toLocaleDateString()}
               </span>
               {canDelete(comment) && (
-                <button className="comment-delete" onClick={() => handleDelete(comment.id)}>
+                <button className="btn btn-danger btn-small" onClick={() => handleDelete(comment.id)}>
                   Delete
                 </button>
               )}
@@ -113,16 +115,16 @@ function Comments({ recipeId, recipeOwnerId }) {
         <form onSubmit={handleSubmit} noValidate>
           <label htmlFor="comment">Your comment</label>
           <textarea
-            id="comment"
+            id="comment" aria-invalid={textError ? 'true' : undefined}
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
           <p className={text.length > MAX_LENGTH ? 'comment-counter over' : 'comment-counter'}>
             {text.length}/{MAX_LENGTH}
           </p>
-          {textError && <p className="comments-error">{textError}</p>}
-          {formError && <p className="comments-error">{formError}</p>}
-          <button className="btn" type="submit" disabled={isPosting}>
+          {textError && <span className="field-error">{textError}</span>}
+          {formError && <p className="form-error">{formError}</p>}
+          <button className="btn btn-primary" type="submit" disabled={isPosting}>
             {isPosting ? 'Posting...' : 'Post comment'}
           </button>
         </form>
