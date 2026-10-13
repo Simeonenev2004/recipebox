@@ -5,6 +5,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  limit,
   orderBy,
   query,
   serverTimestamp,
@@ -18,6 +19,12 @@ const recipesCollection = collection(db, 'recipes')
 export async function getAllRecipes() {
   const recipesQuery = query(recipesCollection, orderBy('createdAt', 'desc'))
   const snapshot = await getDocs(recipesQuery)
+  return snapshot.docs.map((recipeDoc) => ({ id: recipeDoc.id, ...recipeDoc.data() }))
+}
+
+export async function getLatestRecipes(count) {
+  const latestQuery = query(recipesCollection, orderBy('createdAt', 'desc'), limit(count))
+  const snapshot = await getDocs(latestQuery)
   return snapshot.docs.map((recipeDoc) => ({ id: recipeDoc.id, ...recipeDoc.data() }))
 }
 
