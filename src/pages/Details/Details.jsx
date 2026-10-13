@@ -3,6 +3,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext.jsx'
 import { deleteRecipe, getRecipeById } from '../../services/recipeService.js'
 import RecipeImage from '../../components/RecipeImage/RecipeImage.jsx'
+import LikeButton from '../../components/LikeButton/LikeButton.jsx'
+import Comments from '../../components/Comments/Comments.jsx'
 import './Details.css'
 
 function Details() {
@@ -97,6 +99,8 @@ function Details() {
       <h2>Instructions</h2>
       <p className="details-instructions">{recipe.instructions}</p>
 
+      <LikeButton recipeId={id} ownerId={recipe.ownerId} />
+
       {isOwner && (
         <div className="details-actions">
           <Link to={`/catalog/${id}/edit`} className="btn">Edit</Link>
@@ -104,6 +108,8 @@ function Details() {
         </div>
       )}
       {deleteError && <p className="details-error">{deleteError}</p>}
+
+      <Comments recipeId={id} recipeOwnerId={recipe.ownerId} />
     </section>
   )
 }

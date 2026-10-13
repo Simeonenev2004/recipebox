@@ -9,6 +9,7 @@ import {
   query,
   serverTimestamp,
   updateDoc,
+  where,
 } from 'firebase/firestore'
 import { db } from './firebase.js'
 
@@ -18,6 +19,14 @@ export async function getAllRecipes() {
   const recipesQuery = query(recipesCollection, orderBy('createdAt', 'desc'))
   const snapshot = await getDocs(recipesQuery)
   return snapshot.docs.map((recipeDoc) => ({ id: recipeDoc.id, ...recipeDoc.data() }))
+}
+
+export async function getRecipesByOwner(ownerId) {
+  // No orderBy here, so no composite index is needed. Sorting is done in JavaScript.
+  const ownerQuery = query(recipesCollection, where('ownerId', '==', ownerId))
+  const snapshot = await getDocs(ownerQuery)
+  const recipes = snapshot.docs.map((recipeDoc) => ({ id: recipeDoc.id, ...recipeDoc.data() }))
+  return recipes.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis())
 }
 
 export async function getRecipeById(id) {
@@ -53,5 +62,10 @@ export async function updateRecipe(id, data) {
 }
 
 export async function deleteRecipe(id) {
+  // Firestore does not delete subcollections automatically, so remove them first
+  for (const name of ['likes', 'comments']) {
+    const snapshot = await getDocs(collection(db, 'recipes', id, name))
+    await Promise.all(snapshot.docs.map((subDoc) => deleteDoc(subDoc.ref)))
+  }
   await deleteDoc(doc(db, 'recipes', id))
 }
