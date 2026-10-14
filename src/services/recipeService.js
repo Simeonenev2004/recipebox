@@ -1,7 +1,6 @@
 import {
   addDoc,
   collection,
-  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -11,6 +10,7 @@ import {
   serverTimestamp,
   updateDoc,
   where,
+  writeBatch,
 } from 'firebase/firestore'
 import { db } from './firebase.js'
 
@@ -69,10 +69,15 @@ export async function updateRecipe(id, data) {
 }
 
 export async function deleteRecipe(id) {
-  // Firestore does not delete subcollections automatically, so remove them first
-  for (const name of ['likes', 'comments']) {
-    const snapshot = await getDocs(collection(db, 'recipes', id, name))
-    await Promise.all(snapshot.docs.map((subDoc) => deleteDoc(subDoc.ref)))
-  }
-  await deleteDoc(doc(db, 'recipes', id))
+  // Firestore does not delete subcollections automatically. The likes, the comments
+  // and the recipe are deleted in one batch, so either everything is deleted or nothing.
+  // A batch can hold 500 operations, which is enough for this project.
+  const likes = await getDocs(collection(db, 'recipes', id, 'likes'))
+  const comments = await getDocs(collection(db, 'recipes', id, 'comments'))
+
+  const batch = writeBatch(db)
+  likes.docs.forEach((likeDoc) => batch.delete(likeDoc.ref))
+  comments.docs.forEach((commentDoc) => batch.delete(commentDoc.ref))
+  batch.delete(doc(db, 'recipes', id))
+  await batch.commit()
 }

@@ -19,9 +19,18 @@ service cloud.firestore {
       return data.title is string
         && data.title.size() >= 3
         && data.title.size() <= 80
+        && data.category in ['Breakfast', 'Lunch', 'Dinner', 'Dessert', 'Salad', 'Soup', 'Drinks']
+        && data.imageUrl is string
         && data.prepTime is number
+        && data.prepTime >= 1
+        && data.prepTime <= 1440
         && data.servings is number
-        && data.ingredients is list;
+        && data.servings >= 1
+        && data.servings <= 50
+        && data.ingredients is list
+        && data.ingredients.size() >= 1
+        && data.instructions is string
+        && data.instructions.size() >= 10;
     }
 
     function keepsProtectedFields() {
@@ -34,6 +43,7 @@ service cloud.firestore {
 
       allow create: if isSignedIn()
         && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.ownerName is string
         && hasValidFields();
 
       allow update: if isOwner()
@@ -58,6 +68,7 @@ service cloud.firestore {
 
         allow create: if isSignedIn()
           && request.resource.data.authorId == request.auth.uid
+          && request.resource.data.authorName is string
           && request.resource.data.text is string
           && request.resource.data.text.size() >= 1
           && request.resource.data.text.size() <= 500;
