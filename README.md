@@ -29,9 +29,10 @@ The demo recipe photos are stored in `public/images/recipes/`. They come from Wi
 |---|---|---|---|
 | `shopska-salad.jpg` | Popo le Chien | CC0 | https://commons.wikimedia.org/wiki/File:Chopska.jpg |
 | `banitsa.jpg` | borzo | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:Banitsa_borzo.jpg |
-| `tarator.jpg` | Rainer Zenz | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:Cacik-1.jpg |
+| `tarator.jpg` | Gillgaramond | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Tarator_(Bulgarian_cold_soup).jpg |
 | `moussaka.jpg` | Robert Kindermann (RobertK) | CC BY-SA 2.5 | https://commons.wikimedia.org/wiki/File:MussakasMeMelitsanesKePatates01.JPG |
 | `lava-cake.jpg` | FotoosVanRobin | CC BY-SA 2.0 | https://commons.wikimedia.org/wiki/File:Chocolate_Fondant.jpg |
 | `chicken-wrap.jpg` | Takeaway | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:Smoked_chicken_and_avocado_wrap.jpg |
+| `lemonade.jpg` | Shisma | CC BY 4.0 | https://commons.wikimedia.org/wiki/File:Lemonade_2.jpg |
 
-License texts: [CC0](https://creativecommons.org/publicdomain/zero/1.0/), [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/), [CC BY-SA 2.5](https://creativecommons.org/licenses/by-sa/2.5/), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/).
+License texts: [CC0](https://creativecommons.org/publicdomain/zero/1.0/), [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/), [CC BY-SA 2.5](https://creativecommons.org/licenses/by-sa/2.5/), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
