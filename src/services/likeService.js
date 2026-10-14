@@ -1,4 +1,11 @@
-import { collection, deleteDoc, doc, getDocs, serverTimestamp, setDoc } from 'firebase/firestore'
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  serverTimestamp,
+  setDoc,
+} from 'firebase/firestore'
 import { db } from './firebase.js'
 
 export async function getLikes(recipeId) {

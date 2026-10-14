@@ -89,7 +89,11 @@ function Profile() {
             {recipes.length === 1 ? '1 recipe' : `${recipes.length} recipes`}
           </p>
         </div>
-        {isMyProfile && <Link to="/create" className="btn btn-primary">Add recipe</Link>}
+        {isMyProfile && (
+          <Link to="/create" className="btn btn-primary">
+            Add recipe
+          </Link>
+        )}
       </div>
 
       {recipes.length === 0 ? (

@@ -19,20 +19,33 @@ const recipesCollection = collection(db, 'recipes')
 export async function getAllRecipes() {
   const recipesQuery = query(recipesCollection, orderBy('createdAt', 'desc'))
   const snapshot = await getDocs(recipesQuery)
-  return snapshot.docs.map((recipeDoc) => ({ id: recipeDoc.id, ...recipeDoc.data() }))
+  return snapshot.docs.map((recipeDoc) => ({
+    id: recipeDoc.id,
+    ...recipeDoc.data(),
+  }))
 }
 
 export async function getLatestRecipes(count) {
-  const latestQuery = query(recipesCollection, orderBy('createdAt', 'desc'), limit(count))
+  const latestQuery = query(
+    recipesCollection,
+    orderBy('createdAt', 'desc'),
+    limit(count),
+  )
   const snapshot = await getDocs(latestQuery)
-  return snapshot.docs.map((recipeDoc) => ({ id: recipeDoc.id, ...recipeDoc.data() }))
+  return snapshot.docs.map((recipeDoc) => ({
+    id: recipeDoc.id,
+    ...recipeDoc.data(),
+  }))
 }
 
 export async function getRecipesByOwner(ownerId) {
   // No orderBy here, so no composite index is needed. Sorting is done in JavaScript.
   const ownerQuery = query(recipesCollection, where('ownerId', '==', ownerId))
   const snapshot = await getDocs(ownerQuery)
-  const recipes = snapshot.docs.map((recipeDoc) => ({ id: recipeDoc.id, ...recipeDoc.data() }))
+  const recipes = snapshot.docs.map((recipeDoc) => ({
+    id: recipeDoc.id,
+    ...recipeDoc.data(),
+  }))
   return recipes.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis())
 }
 

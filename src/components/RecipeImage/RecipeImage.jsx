@@ -7,7 +7,9 @@ function RecipeImage({ imageUrl, title, className = '' }) {
   if (!imageUrl || hasError) {
     return (
       <div className={`recipe-image recipe-image-placeholder ${className}`}>
-        <span role="img" aria-label="No image">🍽️</span>
+        <span role="img" aria-label="No image">
+          🍽️
+        </span>
       </div>
     )
   }

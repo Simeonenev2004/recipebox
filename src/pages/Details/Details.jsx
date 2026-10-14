@@ -88,7 +88,8 @@ function Details() {
 
       <h1>{recipe.title}</h1>
       <p className="details-meta">
-        {recipe.category} &middot; {recipe.prepTime} min &middot; {recipe.servings} servings
+        {recipe.category} &middot; {recipe.prepTime} min &middot;{' '}
+        {recipe.servings} servings
       </p>
       <p className="details-meta">
         by <Link to={`/profile/${recipe.ownerId}`}>{recipe.ownerName}</Link>
@@ -108,8 +109,12 @@ function Details() {
 
       {isOwner && (
         <div className="details-actions">
-          <Link to={`/catalog/${id}/edit`} className="btn btn-primary">Edit</Link>
-          <button className="btn btn-danger" onClick={handleDelete}>Delete</button>
+          <Link to={`/catalog/${id}/edit`} className="btn btn-primary">
+            Edit
+          </Link>
+          <button className="btn btn-danger" onClick={handleDelete}>
+            Delete
+          </button>
         </div>
       )}
       {deleteError && <ErrorMessage message={deleteError} />}

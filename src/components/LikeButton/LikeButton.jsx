@@ -63,7 +63,11 @@ function LikeButton({ recipeId, ownerId }) {
   return (
     <div className="like-box">
       {isAuthenticated && !isOwner ? (
-        <button className="btn btn-primary btn-small" onClick={handleClick} disabled={isBusy}>
+        <button
+          className="btn btn-primary btn-small"
+          onClick={handleClick}
+          disabled={isBusy}
+        >
           {hasLiked ? '❤️ Unlike' : '🤍 Like'}
         </button>
       ) : (

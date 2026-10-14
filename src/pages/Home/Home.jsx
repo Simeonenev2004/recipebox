@@ -59,15 +59,21 @@ function Home() {
       <section className="hero">
         <h1>Welcome to RecipeBox</h1>
         <p>
-          RecipeBox is a place to share and discover recipes. Browse dishes
-          from other cooks, or add your own favourites.
+          RecipeBox is a place to share and discover recipes. Browse dishes from
+          other cooks, or add your own favourites.
         </p>
         <div className="hero-buttons">
-          <Link to="/catalog" className="btn btn-primary">Browse recipes</Link>
+          <Link to="/catalog" className="btn btn-primary">
+            Browse recipes
+          </Link>
           {isAuthenticated ? (
-            <Link to="/create" className="btn btn-secondary">Share a recipe</Link>
+            <Link to="/create" className="btn btn-secondary">
+              Share a recipe
+            </Link>
           ) : (
-            <Link to="/register" className="btn btn-secondary">Join RecipeBox</Link>
+            <Link to="/register" className="btn btn-secondary">
+              Join RecipeBox
+            </Link>
           )}
         </div>
       </section>

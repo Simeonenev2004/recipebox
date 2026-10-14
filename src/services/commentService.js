@@ -14,10 +14,13 @@ import { db } from './firebase.js'
 export async function getComments(recipeId) {
   const commentsQuery = query(
     collection(db, 'recipes', recipeId, 'comments'),
-    orderBy('createdAt', 'asc')
+    orderBy('createdAt', 'asc'),
   )
   const snapshot = await getDocs(commentsQuery)
-  return snapshot.docs.map((commentDoc) => ({ id: commentDoc.id, ...commentDoc.data() }))
+  return snapshot.docs.map((commentDoc) => ({
+    id: commentDoc.id,
+    ...commentDoc.data(),
+  }))
 }
 
 export async function addComment(recipeId, text, user) {

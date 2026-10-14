@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext.jsx'
-import { addComment, deleteComment, getComments } from '../../services/commentService.js'
+import {
+  addComment,
+  deleteComment,
+  getComments,
+} from '../../services/commentService.js'
 import Loader from '../Loader/Loader.jsx'
 import ErrorMessage from '../ErrorMessage/ErrorMessage.jsx'
 import './Comments.css'
@@ -81,7 +85,10 @@ function Comments({ recipeId, recipeOwnerId }) {
   }
 
   function canDelete(comment) {
-    return isAuthenticated && (user.uid === comment.authorId || user.uid === recipeOwnerId)
+    return (
+      isAuthenticated &&
+      (user.uid === comment.authorId || user.uid === recipeOwnerId)
+    )
   }
 
   return (
@@ -90,18 +97,25 @@ function Comments({ recipeId, recipeOwnerId }) {
 
       {isLoading && <Loader text="Loading comments..." />}
       {loadError && <ErrorMessage message={loadError} />}
-      {!isLoading && !loadError && comments.length === 0 && <p>No comments yet.</p>}
+      {!isLoading && !loadError && comments.length === 0 && (
+        <p>No comments yet.</p>
+      )}
 
       <ul className="comment-list">
         {comments.map((comment) => (
           <li key={comment.id} className="comment">
             <div className="comment-header">
-              <Link to={`/profile/${comment.authorId}`}>{comment.authorName}</Link>
+              <Link to={`/profile/${comment.authorId}`}>
+                {comment.authorName}
+              </Link>
               <span className="comment-date">
                 {comment.createdAt.toDate().toLocaleDateString()}
               </span>
               {canDelete(comment) && (
-                <button className="btn btn-danger btn-small" onClick={() => handleDelete(comment.id)}>
+                <button
+                  className="btn btn-danger btn-small"
+                  onClick={() => handleDelete(comment.id)}
+                >
                   Delete
                 </button>
               )}
@@ -115,16 +129,27 @@ function Comments({ recipeId, recipeOwnerId }) {
         <form onSubmit={handleSubmit} noValidate>
           <label htmlFor="comment">Your comment</label>
           <textarea
-            id="comment" aria-invalid={textError ? 'true' : undefined}
+            id="comment"
+            aria-invalid={textError ? 'true' : undefined}
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
-          <p className={text.length > MAX_LENGTH ? 'comment-counter over' : 'comment-counter'}>
+          <p
+            className={
+              text.length > MAX_LENGTH
+                ? 'comment-counter over'
+                : 'comment-counter'
+            }
+          >
             {text.length}/{MAX_LENGTH}
           </p>
           {textError && <span className="field-error">{textError}</span>}
           {formError && <p className="form-error">{formError}</p>}
-          <button className="btn btn-primary" type="submit" disabled={isPosting}>
+          <button
+            className="btn btn-primary"
+            type="submit"
+            disabled={isPosting}
+          >
             {isPosting ? 'Posting...' : 'Post comment'}
           </button>
         </form>

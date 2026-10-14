@@ -18,26 +18,32 @@ function Header() {
   return (
     <header className="header">
       <div className="container header-inner">
-        <Link to="/" className="logo">RecipeBox</Link>
+        <Link to="/" className="logo">
+          RecipeBox
+        </Link>
         <nav className="nav">
           <NavLink to="/">Home</NavLink>
           <NavLink to="/catalog">Catalog</NavLink>
           {/* The other links wait until Firebase has checked the session, so they do not flicker */}
-          {!authLoading && (isAuthenticated ? (
-            <>
-              <NavLink to="/create">Create</NavLink>
-              <NavLink to={`/profile/${user.uid}`}>My Profile</NavLink>
-              <span className="greeting">Hello, {user.username}</span>
-              <button className="btn btn-secondary btn-small" onClick={handleLogout}>
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <NavLink to="/login">Login</NavLink>
-              <NavLink to="/register">Register</NavLink>
-            </>
-          ))}
+          {!authLoading &&
+            (isAuthenticated ? (
+              <>
+                <NavLink to="/create">Create</NavLink>
+                <NavLink to={`/profile/${user.uid}`}>My Profile</NavLink>
+                <span className="greeting">Hello, {user.username}</span>
+                <button
+                  className="btn btn-secondary btn-small"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <NavLink to="/login">Login</NavLink>
+                <NavLink to="/register">Register</NavLink>
+              </>
+            ))}
         </nav>
       </div>
     </header>

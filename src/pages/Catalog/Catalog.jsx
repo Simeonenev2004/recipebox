@@ -117,7 +117,9 @@ function Catalog() {
             >
               <option value="">All categories</option>
               {CATEGORIES.map((name) => (
-                <option key={name} value={name}>{name}</option>
+                <option key={name} value={name}>
+                  {name}
+                </option>
               ))}
             </select>
             <select
@@ -126,19 +128,25 @@ function Catalog() {
               onChange={(e) => updateParam('sort', e.target.value)}
             >
               {SORT_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>{option.label}</option>
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
               ))}
             </select>
           </div>
 
           <p className="catalog-count">
-            {visibleRecipes.length === 1 ? '1 recipe' : `${visibleRecipes.length} recipes`}
+            {visibleRecipes.length === 1
+              ? '1 recipe'
+              : `${visibleRecipes.length} recipes`}
           </p>
 
           {visibleRecipes.length === 0 ? (
             <div>
               <p>No recipes match your filters.</p>
-              <button className="btn btn-primary" onClick={clearFilters}>Clear filters</button>
+              <button className="btn btn-primary" onClick={clearFilters}>
+                Clear filters
+              </button>
             </div>
           ) : (
             <div className="recipe-grid">

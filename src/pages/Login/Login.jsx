@@ -81,11 +81,17 @@ function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        {errors.password && <span className="field-error">{errors.password}</span>}
+        {errors.password && (
+          <span className="field-error">{errors.password}</span>
+        )}
 
         {formError && <p className="form-error">{formError}</p>}
 
-        <button className="btn btn-primary btn-block" type="submit" disabled={isLoading}>
+        <button
+          className="btn btn-primary btn-block"
+          type="submit"
+          disabled={isLoading}
+        >
           {isLoading ? 'Please wait...' : 'Login'}
         </button>
       </form>

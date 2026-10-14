@@ -84,7 +84,9 @@ function Register() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
-        {errors.username && <span className="field-error">{errors.username}</span>}
+        {errors.username && (
+          <span className="field-error">{errors.username}</span>
+        )}
 
         <label htmlFor="email">Email</label>
         <input
@@ -104,7 +106,9 @@ function Register() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        {errors.password && <span className="field-error">{errors.password}</span>}
+        {errors.password && (
+          <span className="field-error">{errors.password}</span>
+        )}
 
         <label htmlFor="repeatPassword">Repeat password</label>
         <input
@@ -114,11 +118,17 @@ function Register() {
           value={repeatPassword}
           onChange={(e) => setRepeatPassword(e.target.value)}
         />
-        {errors.repeatPassword && <span className="field-error">{errors.repeatPassword}</span>}
+        {errors.repeatPassword && (
+          <span className="field-error">{errors.repeatPassword}</span>
+        )}
 
         {formError && <p className="form-error">{formError}</p>}
 
-        <button className="btn btn-primary btn-block" type="submit" disabled={isLoading}>
+        <button
+          className="btn btn-primary btn-block"
+          type="submit"
+          disabled={isLoading}
+        >
           {isLoading ? 'Please wait...' : 'Register'}
         </button>
       </form>
