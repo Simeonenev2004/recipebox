@@ -22,9 +22,11 @@ function Login() {
   function validate() {
     const newErrors = {}
 
-    if (!email) {
+    const trimmedEmail = email.trim()
+
+    if (!trimmedEmail) {
       newErrors.email = 'Email is required.'
-    } else if (!EMAIL_REGEX.test(email)) {
+    } else if (!EMAIL_REGEX.test(trimmedEmail)) {
       newErrors.email = 'Enter a valid email address.'
     }
 
@@ -49,7 +51,7 @@ function Login() {
 
     setIsLoading(true)
     try {
-      await login(email, password)
+      await login(email.trim(), password)
       navigate('/catalog')
     } catch (error) {
       setFormError(getAuthErrorMessage(error))

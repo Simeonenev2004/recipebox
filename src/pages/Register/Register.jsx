@@ -24,15 +24,18 @@ function Register() {
   function validate() {
     const newErrors = {}
 
-    if (!username) {
+    const trimmedUsername = username.trim()
+    const trimmedEmail = email.trim()
+
+    if (!trimmedUsername) {
       newErrors.username = 'Username is required.'
-    } else if (username.length < 3 || username.length > 20) {
+    } else if (trimmedUsername.length < 3 || trimmedUsername.length > 20) {
       newErrors.username = 'Username must be between 3 and 20 characters.'
     }
 
-    if (!email) {
+    if (!trimmedEmail) {
       newErrors.email = 'Email is required.'
-    } else if (!EMAIL_REGEX.test(email)) {
+    } else if (!EMAIL_REGEX.test(trimmedEmail)) {
       newErrors.email = 'Enter a valid email address.'
     }
 
@@ -61,7 +64,7 @@ function Register() {
 
     setIsLoading(true)
     try {
-      await register(email, password, username)
+      await register(email.trim(), password, username.trim())
       navigate('/catalog')
     } catch (error) {
       setFormError(getAuthErrorMessage(error))

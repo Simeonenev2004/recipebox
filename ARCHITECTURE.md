@@ -62,7 +62,7 @@ Small interactions (a like, a new comment) update local state after the request 
 - `authLoading` is `true` until Firebase has checked the stored session. `PrivateRoute` and `GuestRoute` show `Loader` during this time, so a logged in user is not sent to `/login` on refresh.
 - After loading: `PrivateRoute` redirects guests to `/login`, and `GuestRoute` redirects logged in users to `/`. Both render `<Outlet />` otherwise.
 - On register, `authService.register` also writes `users/{uid}`, and `AuthContext.register` sets the user from the result because `onAuthStateChanged` may run before the username is saved.
-- `Header` reads the same context to show the right links.
+- `Header` reads the same context to show the right links. While `authLoading` is true it shows only Home and Catalog, so the login and user links do not flicker after a refresh.
 
 ## 6. Data model
 
@@ -88,9 +88,9 @@ Small interactions (a like, a new comment) update local state after the request 
 
 `firestore.rules` is the real protection. It uses the helpers `isSignedIn()`, `isOwner()` and `recipeOwner(recipeId)`.
 
-- **recipes:** anyone can read. Create needs a signed in user, `ownerId` equal to their uid, a string title of 3 to 80 characters, numeric `prepTime` and `servings`, and a list `ingredients`. Update and delete are allowed only for the owner, and an update cannot change `ownerId`, `ownerName` or `createdAt`.
-- **likes:** anyone can read. A user can create only their own like document and not on their own recipe. Delete is allowed for the user who liked and for the recipe owner (needed when the recipe is deleted). Update is not allowed.
-- **comments:** anyone can read. Create needs `authorId` equal to the user's uid and text of 1 to 500 characters. Delete is allowed for the comment author and for the recipe owner. Update is not allowed.
+- **recipes:** anyone can read. Create needs a signed in user, `ownerId` equal to their uid and a string `ownerName`. The fields are checked by `hasValidFields()` on create and on update: title 3 to 80 characters, `category` from the seven known values, string `imageUrl` (empty is allowed), `prepTime` from 1 to 1440, `servings` from 1 to 50, `ingredients` a list with at least one item, and `instructions` a string of at least 10 characters. Update and delete are allowed only for the owner, and an update cannot change `ownerId`, `ownerName` or `createdAt`.
+- **likes:** anyone can read. A user can create only their own like document and not on their own recipe. Delete is allowed for the user who liked and for the recipe owner (needed when the recipe is deleted; `deleteRecipe` removes the likes, the comments and the recipe in one `writeBatch`). Update is not allowed.
+- **comments:** anyone can read. Create needs `authorId` equal to the user's uid, a string `authorName` and text of 1 to 500 characters. Delete is allowed for the comment author and for the recipe owner. Update is not allowed.
 - **users:** anyone can read. A user can create only their own document with a 3 to 20 character username. Update and delete are not allowed.
 - Everything else is denied.
 

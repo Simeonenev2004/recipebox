@@ -3,12 +3,16 @@ import { useAuth } from '../../contexts/AuthContext.jsx'
 import './Header.css'
 
 function Header() {
-  const { user, isAuthenticated, logout } = useAuth()
+  const { user, isAuthenticated, authLoading, logout } = useAuth()
   const navigate = useNavigate()
 
   async function handleLogout() {
-    await logout()
-    navigate('/')
+    try {
+      await logout()
+      navigate('/')
+    } catch {
+      window.alert('Logout failed. Please try again.')
+    }
   }
 
   return (
@@ -18,7 +22,8 @@ function Header() {
         <nav className="nav">
           <NavLink to="/">Home</NavLink>
           <NavLink to="/catalog">Catalog</NavLink>
-          {isAuthenticated ? (
+          {/* The other links wait until Firebase has checked the session, so they do not flicker */}
+          {!authLoading && (isAuthenticated ? (
             <>
               <NavLink to="/create">Create</NavLink>
               <NavLink to={`/profile/${user.uid}`}>My Profile</NavLink>
@@ -32,7 +37,7 @@ function Header() {
               <NavLink to="/login">Login</NavLink>
               <NavLink to="/register">Register</NavLink>
             </>
-          )}
+          ))}
         </nav>
       </div>
     </header>

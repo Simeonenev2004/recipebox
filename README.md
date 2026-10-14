@@ -5,9 +5,14 @@ RecipeBox is a single page application for sharing and discovering recipes. Visi
 ## Live Demo
 
 - Deploy link: https://recipebox-ee99f.web.app
-- Demo account (already has recipes):
-  - Email: `georgi@recipebox.com`
-  - Password: `PASSWORD_HERE`
+- Demo accounts (both already exist and have recipes):
+
+| User | Email | Password | Recipes |
+|---|---|---|---|
+| Georgi | `georgi@recipebox.com` | `demo12345` | 4: Tarator, Shopska Salad, Banitsa, Moussaka |
+| Maria | `maria@recipebox.com` | `demo1234` | 3: Chocolate Lava Cake, Chicken Wrap, Homemade Lemonade |
+
+- Log in as one of them to edit or delete that user's recipes. Log in as the other one to like and comment on those recipes, and to see that Edit and Delete are missing on someone else's recipe.
 - You can also create a new account on the Register page.
 
 ## Tech Stack
@@ -80,10 +85,10 @@ The live application works without any local installation. To run the project lo
 
 **Authentication flow**
 1. **App start.** `src/main.jsx` wraps the app in `AuthProvider` (`src/contexts/AuthContext.jsx`). The context starts with `user = null` and `authLoading = true`.
-2. **Status check.** In a `useEffect`, `AuthContext` subscribes with `onAuthStateChanged`. Firebase calls it once with the stored user or with `null`. The callback sets `user` (`uid`, `email`, `username`) and sets `authLoading` to `false`. While `authLoading` is true, the route guards show a `Loader`.
+2. **Status check.** In a `useEffect`, `AuthContext` subscribes with `onAuthStateChanged`. Firebase calls it once with the stored user or with `null`. The callback sets `user` (`uid`, `email`, `username`) and sets `authLoading` to `false`. While `authLoading` is true, the route guards show a `Loader` and `Header` shows only Home and Catalog, so the login or user links do not flicker after a refresh.
 3. **Login.** The Login page validates the form and calls `login` from the context, which calls `signInWithEmailAndPassword` in `src/services/authService.js`. `onAuthStateChanged` then updates `user`, and the page navigates to `/catalog`.
 4. **Register.** `authService.register` calls `createUserWithEmailAndPassword`, then `updateProfile` to store the username as `displayName`, then `createUserProfile` (`src/services/userService.js`) to create the document `users/{uid}`. `AuthContext.register` then sets `user` itself, because `onAuthStateChanged` can fire before `updateProfile` has finished and would give a user without a username. The page then navigates to `/catalog`.
-5. **Logout.** The Logout button in `Header.jsx` calls `logout` (`signOut`). The listener sets `user` to `null` and the header navigates to `/`.
+5. **Logout.** The Logout button in `Header.jsx` calls `logout` (`signOut`). The listener sets `user` to `null` and the header navigates to `/`. If signing out fails, the header shows an alert ("Logout failed. Please try again.") and does not navigate.
 
 **Session persistence**
 Firebase Authentication keeps the session in the browser (its default persistence). `AuthContext` only holds an in-memory copy of it. After a page refresh, `onAuthStateChanged` runs again, finds the stored session and sets `user`, so the user stays logged in. The guards wait for `authLoading` to become `false`, so a logged in user is not sent to the login page during a refresh.
@@ -139,7 +144,7 @@ Firebase Authentication keeps the session in the browser (its default persistenc
 | `recipes/{id}/comments/{commentId}` | `text`, `authorId`, `authorName`, `createdAt` |
 | `users/{uid}` | `username`, `createdAt` |
 
-**Security rules** (`firestore.rules`): recipes, likes, comments and users can be read by everyone. Writes need a logged in user. Recipes can only be created with your own `ownerId`, and only the owner can update or delete them (and `ownerId`, `ownerName`, `createdAt` cannot change). Likes can only be created for your own `uid` and not on your own recipe. Comments need your own `authorId` and 1 to 500 characters of text, and can be deleted by the comment author or the recipe owner. Users documents can only be created for your own `uid` and never changed. Everything else is denied. See `ARCHITECTURE.md` for details.
+**Security rules** (`firestore.rules`): recipes, likes, comments and users can be read by everyone. Writes need a logged in user. Recipes can only be created with your own `ownerId` and a valid set of fields (title 3 to 80 characters, a known category, a string `imageUrl`, `prepTime` 1 to 1440, `servings` 1 to 50, at least one ingredient, instructions of at least 10 characters). Only the owner can update or delete them, an update must keep the fields valid, and `ownerId`, `ownerName`, `createdAt` cannot change. Likes can only be created for your own `uid` and not on your own recipe. Comments need your own `authorId`, a string `authorName` and 1 to 500 characters of text, and can be deleted by the comment author or the recipe owner. Users documents can only be created for your own `uid` and never changed. Everything else is denied. See `ARCHITECTURE.md` for details.
 
 ### 7. Data Operations (CRUD)
 
@@ -152,7 +157,7 @@ All Firestore calls are in `src/services/`. Pages call these functions and do no
   - Details and Edit: `getRecipeById(id)`
   - Profile: `getRecipesByOwner(userId)` together with `getUserProfile(userId)`
 - **Update:** the author opens `/catalog/:id/edit`. `Edit.jsx` loads the recipe and fills `RecipeForm`. On submit it calls `updateRecipe(id, data)`, which sends only the editable fields. The user is then redirected to the details page, which loads the fresh data.
-- **Delete:** the Delete button on the details page (author only) asks `window.confirm("Delete this recipe?")`. Then `deleteRecipe(id)` first deletes all documents in the `likes` and `comments` subcollections (Firestore does not do this automatically) and then the recipe. After that the user is redirected to `/catalog`, which loads the list again. If it fails, an error message is shown.
+- **Delete:** the Delete button on the details page (author only) asks `window.confirm("Delete this recipe?")`. Then `deleteRecipe(id)` reads the `likes` and `comments` documents and deletes them together with the recipe in one `writeBatch` (Firestore does not delete subcollections automatically), so everything is deleted or nothing is. After that the user is redirected to `/catalog`, which loads the list again. If it fails, an error message is shown.
 - **Likes and comments** work on other people's records. `LikeButton` adds or removes the user's like document and updates its local list without reloading. `Comments` adds a comment (shown at the end of the list immediately) or deletes one (removed from the list). Both use `likeService.js` and `commentService.js`.
 
 ### 8. Forms & Validation
@@ -163,11 +168,11 @@ All Firestore calls are in `src/services/`. Pages call these functions and do no
 
 | Form | Field | Rules |
 |---|---|---|
-| Register | username | required; 3 to 20 characters |
-| Register | email | required; simple email format check |
+| Register | username | required; 3 to 20 characters (after trim) |
+| Register | email | required; simple email format check (after trim) |
 | Register | password | required; at least 6 characters |
 | Register | repeat password | must equal the password |
-| Login | email | required; simple email format check |
+| Login | email | required; simple email format check (after trim) |
 | Login | password | required; at least 6 characters |
 | Recipe | title | 3 to 80 characters (after trim) |
 | Recipe | category | must be one of the seven categories |
